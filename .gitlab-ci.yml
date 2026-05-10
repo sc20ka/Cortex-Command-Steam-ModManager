@@ -10,9 +10,9 @@ build_windows:
   tags:
     - windows
   script:
-    - dotnet restore
-    - dotnet build --configuration Release --no-restore
-    - dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/
+    - dotnet restore CortexCommandModManager.csproj
+    - dotnet build CortexCommandModManager.csproj --configuration Release --no-restore
+    - dotnet publish CortexCommandModManager.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/
   artifacts:
     paths:
       - publish/

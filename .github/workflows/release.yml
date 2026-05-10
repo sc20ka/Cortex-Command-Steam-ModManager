@@ -22,7 +22,7 @@ jobs:
           dotnet-version: '9.0.x' # Используемая версия .NET
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore CortexCommandModManager.csproj
 
       - name: Publish Application
         # Публикуем как один независимый exe файл
