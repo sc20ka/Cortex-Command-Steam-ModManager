@@ -1,0 +1,26 @@
+stages:
+  - build
+  - test
+
+variables:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+build_windows:
+  stage: build
+  tags:
+    - windows
+  script:
+    - dotnet restore
+    - dotnet build --configuration Release --no-restore
+    - dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/
+  artifacts:
+    paths:
+      - publish/
+    expire_in: 1 week
+
+test_windows:
+  stage: test
+  tags:
+    - windows
+  script:
+    - dotnet test --no-build --verbosity normal

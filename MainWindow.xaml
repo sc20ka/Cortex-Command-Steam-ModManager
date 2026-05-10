@@ -1,0 +1,120 @@
+<Window x:Class="CortexCommandModManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CortexCommandModManager"
+        xmlns:vm="clr-namespace:CortexCommandModManager.ViewModels"
+        mc:Ignorable="d"
+        Title="Cortex-Command Steam ModManager" Height="500" Width="850"
+        Background="#2D2D30">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+    
+    <Grid>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Top Bar -->
+            <Grid Grid.Row="0" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Content="{Binding Strings[UpdateList]}" Command="{Binding LoadModsCommand}" Margin="0,0,5,0" Padding="10,5" Background="#3E3E42" Foreground="White" BorderBrush="#555555"/>
+                <Button Grid.Column="1" Content="{Binding Strings[EnableAll]}" Command="{Binding EnableAllCommand}" Margin="0,0,5,0" Padding="10,5" Background="#3E3E42" Foreground="White" BorderBrush="#555555"/>
+                <Button Grid.Column="2" Content="{Binding Strings[DisableAll]}" Command="{Binding DisableAllCommand}" Padding="10,5" Background="#3E3E42" Foreground="White" BorderBrush="#555555"/>
+
+                <!-- Settings and Language Buttons -->
+                <Button Grid.Column="4" Command="{Binding OpenSettingsCommand}" Width="32" Height="32" Background="Transparent" BorderThickness="0" Margin="0,0,5,0">
+                    <Path Data="M19.43,12.98C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.65 15.48,5.32 14.87,5.07L14.49,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.51,2.42L9.13,5.07C8.52,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.98L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.52,18.68 9.13,18.93L9.51,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.49,21.58L14.87,18.93C15.48,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.98M12,15.5C10.06,15.5 8.5,13.93 8.5,12C8.5,10.06 10.06,8.5 12,8.5C13.93,8.5 15.5,10.06 15.5,12C15.5,13.93 13.93,15.5 12,15.5Z" Fill="White" Stretch="Uniform" Margin="4"/>
+                </Button>
+                <Button x:Name="LanguageButton" Grid.Column="5" Width="32" Height="32" Background="Transparent" BorderThickness="0" Click="LanguageButton_Click">
+                    <Path Data="M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M11,19.93C7.06,19.43 4,16.05 4,12C4,11.38 4.08,10.78 4.21,10.21L9,15V16C9,17.1 9.9,18 11,18V19.93M17.9,17.39C17.64,16.58 16.9,16 16,16H15V13C15,12.45 14.55,12 14,12H8V10H10C10.55,10 11,9.55 11,9V7H13C14.1,7 15,6.1 15,5V4.59C17.93,5.78 20,8.65 20,12C20,14.08 19.2,15.97 17.9,17.39Z" Fill="White" Stretch="Uniform" Margin="4"/>
+                    <Button.ContextMenu>
+                        <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                            <MenuItem Header="Русский (ru)" IsCheckable="True" IsChecked="{Binding IsRuSelected, Mode=OneWay}" Command="{Binding ChangeLanguageCommand}" CommandParameter="ru"/>
+                            <MenuItem Header="English (en)" IsCheckable="True" IsChecked="{Binding IsEnSelected, Mode=OneWay}" Command="{Binding ChangeLanguageCommand}" CommandParameter="en"/>
+                            <MenuItem Header="العربية (ar)" IsCheckable="True" IsChecked="{Binding IsArSelected, Mode=OneWay}" Command="{Binding ChangeLanguageCommand}" CommandParameter="ar"/>
+                            <MenuItem Header="中文 (zh)" IsCheckable="True" IsChecked="{Binding IsZhSelected, Mode=OneWay}" Command="{Binding ChangeLanguageCommand}" CommandParameter="zh"/>
+                            <MenuItem Header="日本語 (jp)" IsCheckable="True" IsChecked="{Binding IsJpSelected, Mode=OneWay}" Command="{Binding ChangeLanguageCommand}" CommandParameter="jp"/>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+            </Grid>
+
+            <ListBox Grid.Row="1" ItemsSource="{Binding Mods}" Background="#1E1E1E" Foreground="White" BorderBrush="#3F3F46" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="#3F3F46" BorderThickness="0,0,0,1" Padding="5" Margin="5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Rectangle Width="32" Height="32" Fill="#007ACC" Grid.Column="0" Margin="0,0,10,0"/>
+
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="14" Foreground="White"/>
+                                    <TextBlock Text="{Binding RteFolderName}" FontSize="12" Foreground="#A0A0A0"/>
+                                </StackPanel>
+
+                                <CheckBox Grid.Column="2" VerticalAlignment="Center" 
+                                          IsChecked="{Binding IsInstalled, Mode=OneWay}" 
+                                          Command="{Binding DataContext.ToggleModCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" 
+                                          CommandParameter="{Binding}"
+                                          Content="{Binding DataContext.Strings[Installed], RelativeSource={RelativeSource AncestorType=ListBox}}" 
+                                          Foreground="White"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <StatusBar Grid.Row="2" Background="#007ACC" Foreground="White" Margin="0,10,0,0">
+                <StatusBarItem>
+                    <TextBlock Text="{Binding StatusMessage}"/>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right">
+                    <ProgressBar IsIndeterminate="True" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}" Width="100" Height="15"/>
+                </StatusBarItem>
+            </StatusBar>
+        </Grid>
+
+        <!-- Settings Overlay -->
+        <Grid Background="#AA000000" Visibility="{Binding IsSettingsOpen, Converter={StaticResource BoolToVis}}" Panel.ZIndex="100">
+            <Border Background="#2D2D30" BorderBrush="#555555" BorderThickness="1" Width="450" Height="280" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="20">
+                <StackPanel>
+                    <TextBlock Text="{Binding Strings[Settings]}" FontSize="18" FontWeight="Bold" Foreground="White" Margin="0,0,0,15"/>
+                    
+                    <TextBlock Text="{Binding Strings[SteamPath]}" Foreground="White" Margin="0,0,0,5"/>
+                    <TextBox Text="{Binding ResolvedSteamPath, UpdateSourceTrigger=PropertyChanged}" Background="#1E1E1E" Foreground="White" BorderBrush="#3F3F46" Margin="0,0,0,10" Padding="4"/>
+                    
+                    <TextBlock Text="{Binding Strings[GamePath]}" Foreground="White" Margin="0,0,0,5"/>
+                    <TextBox Text="{Binding ResolvedGamePath, UpdateSourceTrigger=PropertyChanged}" Background="#1E1E1E" Foreground="White" BorderBrush="#3F3F46" Margin="0,0,0,25" Padding="4"/>
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="{Binding Strings[ResetDefault]}" Command="{Binding ResetPathsCommand}" Margin="0,0,10,0" Padding="10,5" Background="#3E3E42" Foreground="White" BorderBrush="#555555"/>
+                        <Button Content="{Binding Strings[ClearConfig]}" Command="{Binding ClearConfigCommand}" Margin="0,0,10,0" Padding="10,5" Background="#AA3333" Foreground="White" BorderBrush="#555555"/>
+                        <Button Content="{Binding Strings[Close]}" Command="{Binding CloseSettingsCommand}" Padding="15,5" Background="#007ACC" Foreground="White" BorderBrush="#005A9E"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
