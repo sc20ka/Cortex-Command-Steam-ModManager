@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Срабатывает при пуше тегов, начинающихся с "v" (например, v1.0.0)
+
+jobs:
+  build_and_release:
+    name: Build and Create Release
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x' # Используемая версия .NET
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Publish Application
+        # Публикуем как один независимый exe файл
+        run: dotnet publish CortexCommandModManager.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o ./publish_output
+
+      - name: Create App Archive
+        # Создаем zip-архив с exe-файлом
+        run: Compress-Archive -Path ./publish_output/* -DestinationPath Cortex-Command-ModManager-win-x64.zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Cortex-Command-ModManager-win-x64.zip
+          generate_release_notes: true
+          # Исходный код (Source code zip и tar.gz) прикрепляется GitHub автоматически!
